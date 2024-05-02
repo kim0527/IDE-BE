@@ -1,4 +1,4 @@
-package IDE.auth.join.dto;
+package api.v1.auth.join.dto;
 
 import lombok.Builder;
 import lombok.Getter;

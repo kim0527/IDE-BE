@@ -1,18 +1,12 @@
-package IDE.auth.login.controller;
+package api.v1.auth.login.controller;
 
-import IDE.auth.kakao.KakaoOAuth;
-import IDE.auth.kakao.KakaoProfile;
-import IDE.auth.kakao.KakaoService;
-import IDE.auth.login.dto.IsUserRequestDto;
-import IDE.auth.login.dto.LoginResponseDto;
+import api.v1.auth.kakao.KakaoProfile;
+import api.v1.auth.kakao.KakaoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -55,7 +49,5 @@ public class loginController {
 
         return "success";
     }
-
-    @
 
 }

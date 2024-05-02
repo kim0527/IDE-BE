@@ -1,7 +1,7 @@
-package IDE.auth.kakao;
+package api.v1.auth.kakao;
 
 
-import IDE.repository.UserRepository;
+import api.v1.repository.UserRepository;
 import com.google.gson.Gson;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

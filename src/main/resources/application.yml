@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+docker:
+  email: hwryu990927@gmail.com
+  password: hwryu990927!
+  username: uhanuu
+
+
+compile:
+  path: /Users/ryu/goorm/ide/webide/compile/

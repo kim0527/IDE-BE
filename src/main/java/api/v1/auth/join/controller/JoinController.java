@@ -1,16 +1,13 @@
-package IDE.auth.join.controller;
+package api.v1.auth.join.controller;
 
-import IDE.domain.User;
-import IDE.auth.join.dto.JoinRequestDto;
-import IDE.auth.join.service.JoinService;
+import api.v1.domain.User;
+import api.v1.auth.join.dto.JoinRequestDto;
+import api.v1.auth.join.service.JoinService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor

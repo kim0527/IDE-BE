@@ -1,4 +1,4 @@
-package IDE.domain;
+package api.v1.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
-package IDE.auth.join.service;
+package api.v1.auth.join.service;
 
-import IDE.domain.User;
-import IDE.repository.UserRepository;
+import api.v1.domain.User;
+import api.v1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

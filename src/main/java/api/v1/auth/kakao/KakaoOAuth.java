@@ -1,4 +1,4 @@
-package IDE.auth.kakao;
+package api.v1.auth.kakao;
 
 import lombok.Data;
 @Data
