@@ -33,7 +33,7 @@ public class UserInit {
 
         private void init() {
             final User user = User.builder()
-                    .kakaoId(1L)
+                    .kakaoId(1)
                     .name("test")
                     .profileImg("test")
                     .nickname("test")

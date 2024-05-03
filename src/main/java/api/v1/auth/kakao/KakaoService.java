@@ -79,8 +79,11 @@ public class KakaoService {
         return kakaoProfile;
     }
 
-
-
+    public KakaoProfile getKakaoProfile(String code) {
+        String accessToken = getAccessToken(code).getAccess_token();
+        KakaoProfile kakaoProfile = getUserInfo(accessToken);
+        return kakaoProfile;
+    }
 
 
 }
