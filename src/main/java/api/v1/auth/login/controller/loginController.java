@@ -2,52 +2,64 @@ package api.v1.auth.login.controller;
 
 import api.v1.auth.kakao.KakaoProfile;
 import api.v1.auth.kakao.KakaoService;
+import api.v1.auth.login.dto.IsUserRequestDto;
+import api.v1.auth.login.dto.LoginResponseDto;
+import api.v1.auth.login.dto.UserLoginDto;
+import api.v1.auth.login.service.LoginService;
+import api.v1.auth.token.CookieTokenHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/ide/login")
 public class loginController {
 
+    private final LoginService loginService;
     private final KakaoService kakaoService;
+    private final CookieTokenHandler cookieTokenHandler;
 
     /*
     Test용
      */
-    @GetMapping
+    @GetMapping("/ide/login")
     public String loginPage(Model model) {
         model.addAttribute("kakaoApiKey", kakaoService.getClientId());
         model.addAttribute("redirectUri", kakaoService.getRedirectUri());
         return "kakaoLogin";
     }
 
-    @RequestMapping("/kakao")
-//    public ResponseEntity<LoginResponseDto> isUser(@RequestBody IsUserRequestDto isUserRequestDto){
-//        ResponseEntity<LoginResponseDto>
-    public String kakaoLogin(@RequestParam(value="code")String code){
-        // 인가 코드 받기
-//        final String code = isUserRequestDto.getCode();
-        // 인가 코드를 통해서 accessToken 받기
-        final String accessToken = kakaoService.getAccessToken(code).getAccess_token();
+    @PostMapping("/api/v1/auth/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody IsUserRequestDto isUserRequestDto, HttpServletResponse response){
+        String code = isUserRequestDto.getCode();
 
-        KakaoProfile userInfo = kakaoService.getUserInfo(accessToken);
-        Integer id = userInfo.getId();
+        final KakaoProfile kakaoProfile = kakaoService.getKakaoProfile(code);
+        final UserLoginDto userLoginDto = loginService.login(kakaoProfile);
 
+        cookieTokenHandler.setCookieToken(response,userLoginDto.getRefreshToken());
 
-        String nickname = (String)userInfo.getNickname();
+        final LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+                .memberId(userLoginDto.getId())
+                .token(userLoginDto.getAccessToken())
+                .hasExtraDetails(true)
+                .build();
 
-        log.info("id = " + id);
-        log.info("nickname = " + nickname);
-        log.info("accessToken = " + accessToken);
+        return ResponseEntity.ok(loginResponseDto);
+    }
 
-        return "success";
+    @GetMapping("/api/v1/auth/logout")
+    public ResponseEntity<?> logout(@CookieValue("Refresh-Token") String refreshToken, HttpServletResponse response){
+
+        System.out.println("refreshToken:"+refreshToken);
+        loginService.logout(refreshToken);
+        cookieTokenHandler.expireCookieToken(response);
+
+        return ResponseEntity.ok().build();
     }
 
 }

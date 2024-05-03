@@ -1,43 +1,44 @@
 package api.v1.auth.join.controller;
 
+import api.v1.auth.join.dto.CheckDuplicateResponseDto;
+import api.v1.auth.join.dto.JoinResponseDto;
+import api.v1.auth.join.dto.UserJoinDto;
+import api.v1.auth.token.CookieTokenHandler;
 import api.v1.domain.User;
 import api.v1.auth.join.dto.JoinRequestDto;
 import api.v1.auth.join.service.JoinService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class JoinController {
 
     private final JoinService joinService;
+    private final CookieTokenHandler cookieTokenHandler;
 
-    @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody JoinRequestDto joinRequestDto){
+    @PostMapping("/api/v1/auth/join")
+    public ResponseEntity<JoinResponseDto> join(@RequestBody JoinRequestDto joinRequestDto, HttpServletResponse response){
 
-        if(joinService.isKakaoId(joinRequestDto.getKakaoId())){
-            return ResponseEntity.ok("이미 유저 입니다.");
-        }
+        final UserJoinDto userJoinDto = joinService.join(joinRequestDto);
 
-        if(joinService.isNickname(joinRequestDto.getNickname())){
-            return ResponseEntity.ok("이미 존재하는 닉네임 입니다.");
-        }
+        cookieTokenHandler.setCookieToken(response,userJoinDto.getRefreshToken());
+        final JoinResponseDto joinResponseDto = JoinResponseDto.builder()
+                .memberId(userJoinDto.getId())
+                .token(userJoinDto.getAccessToken())
+                .hasExtraDetails(true)
+                .build();
 
-        final User user = User.builder()
-                    .kakaoId(joinRequestDto.getKakaoId())
-                    .name(joinRequestDto.getName())
-                    .profileImg(joinRequestDto.getProfileImg())
-                    .nickname(joinRequestDto.getNickname())
-                    .birthDate(joinRequestDto.getBirthDate())
-                    .role("ROLE_ADMIN")
-                    .build();
+        return ResponseEntity.ok(joinResponseDto);
+    }
 
-        Long result = joinService.join(user);
+    @GetMapping("/api/v1/auth/join/username-duplicate")
+    public ResponseEntity<CheckDuplicateResponseDto>checkDuplication(@RequestParam("name") String nickname){
+        final CheckDuplicateResponseDto response = CheckDuplicateResponseDto.builder().duplicate(joinService.isNickname(nickname)).build();
+        return ResponseEntity.ok(response);
 
-        return ResponseEntity.ok("회원가입에 성공했습니다. ( Id = "+result+" )");
     }
 
 

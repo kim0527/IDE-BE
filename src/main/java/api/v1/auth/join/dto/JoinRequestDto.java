@@ -10,19 +10,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class JoinRequestDto {
 
-    private Long kakaoId;
-    private String name;
-    private String profileImg;
+    private String provider;
+    private String code;
     private String nickname;
     private LocalDate birthDate;
 
     @Builder
-    private JoinRequestDto(Long kakaoId, String name, String profileImg, String nickname, LocalDate birthDate) {
-        this.kakaoId=kakaoId;
-        this.name = name;
-        this.profileImg = profileImg;
+    private JoinRequestDto(String provider, String code, String nickname, LocalDate birthDate) {
+        this.provider = provider;
+        this.code = code;
         this.nickname = nickname;
         this.birthDate = birthDate;
     }
+
 
 }

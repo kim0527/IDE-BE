@@ -18,11 +18,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
+
     /*
     Kakao API
      */
     @Column(name = "kakao_id",nullable = false, unique = true)
-    private Long kakaoId;
+    private Integer kakaoId;
 
     @Column(name = "name",nullable = false)
     private String name;
@@ -33,10 +34,10 @@ public class User {
     /*
     추가 회원가입 과정
      */
-    @Column(name="nickname",nullable = false, unique = true)
+    @Column(name="nickname", unique = true)
     private String nickname;
 
-    @Column(name = "birth_date",nullable = false)
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     /*
@@ -46,7 +47,7 @@ public class User {
     private String role;
 
     @Builder
-    private User(Long kakaoId,
+    private User(Integer kakaoId,
                  String name,
                  String profileImg,
                  String nickname,
