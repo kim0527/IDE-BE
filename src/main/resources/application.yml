@@ -26,3 +26,16 @@ docker:
 
 compile:
   path: /Users/ryu/goorm/ide/webide/compile/
+
+
+kakao:
+  client_id: 66bebbcee6a6edfb974809d9fd180e94
+  redirect_uri: http://localhost:8080/ide/login/kakao
+
+application:
+  security:
+    jwt:
+      secret-key: secretKeysldkfjlaijl1kjf1255dslkfjlefldkjfladisjflkdajflqijfdlkjalfijawlkdfjlkjafldijflakdjflaidjflkadjflakdjfladksjflidjaf
+      expiration: 30
+      refresh-token:
+        expiration: 60
